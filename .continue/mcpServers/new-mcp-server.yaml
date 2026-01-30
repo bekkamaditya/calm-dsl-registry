@@ -1,0 +1,14 @@
+name: Calm DSL MCP Server
+version: 1.0.0
+schema: v1
+
+mcpServers:
+  - name: calm-dsl
+    command: /Users/harsha.deshpande/Desktop/hackathon/calm-ui/dsl-agent/yaml-agent/calm_mcp_subagent/venv/bin/python
+    args:
+      - /Users/harsha.deshpande/Desktop/hackathon/calm-ui/dsl-agent/yaml-agent/calm_mcp/calm_server.py
+    requestTimeout: 180000
+    env:
+      CALM_DSL_PATH: /Users/harsha.deshpande/Desktop/hackathon/venv-dsl
+      CALM_OUTPUT_DIR: /Users/harsha.deshpande/Desktop/hackathon/calm-dsl-registry
+
