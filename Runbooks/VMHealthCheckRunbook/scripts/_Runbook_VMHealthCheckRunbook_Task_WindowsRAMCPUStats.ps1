@@ -1,0 +1,1 @@
+$mem = Get-WmiObject Win32_OperatingSystem; "RAM Used: $([math]::Round(($mem.TotalVisibleMemorySize - $mem.FreePhysicalMemory)/$mem.TotalVisibleMemorySize*100,2))%"; $cpu = Get-WmiObject Win32_Processor; "CPU Load: $($cpu.LoadPercentage)%"

@@ -1,0 +1,1 @@
+Get-PSDrive C | ForEach-Object { $_.Used / $_.Maximum * 100 }

@@ -1,0 +1,132 @@
+{
+  "metadata": {
+    "kind": "runbook",
+    "project_reference": {
+      "kind": "project",
+      "name": "hack_demo_project",
+      "uuid": "{{UUID_1}}"
+    }
+  },
+  "status": {
+    "name": "VMHealthCheckRunbook",
+    "description": "",
+    "resources": {
+      "credential_definition_list": [],
+      "endpoint_definition_list": [],
+      "runbook": {
+        "name": "VMHealthCheckRunbook",
+        "uuid": "{{UUID_2}}",
+        "variable_list": [],
+        "output_variable_list": [],
+        "main_task_local_reference": {
+          "kind": "app_task",
+          "name": "DAG_Main",
+          "uuid": "{{UUID_3}}"
+        },
+        "task_definition_list": [
+          {
+            "name": "DAG_Main",
+            "type": "DAG",
+            "uuid": "{{UUID_3}}",
+            "attrs": {
+              "edges": [
+                {
+                  "from_task_reference": {
+                    "kind": "app_task",
+                    "name": "WindowsDiskStats",
+                    "uuid": "{{UUID_4}}"
+                  },
+                  "to_task_reference": {
+                    "kind": "app_task",
+                    "name": "WindowsRAMCPUStats",
+                    "uuid": "{{UUID_5}}"
+                  }
+                },
+                {
+                  "from_task_reference": {
+                    "kind": "app_task",
+                    "name": "WindowsRAMCPUStats",
+                    "uuid": "{{UUID_5}}"
+                  },
+                  "to_task_reference": {
+                    "kind": "app_task",
+                    "name": "LinuxVMStatus",
+                    "uuid": "{{UUID_6}}"
+                  }
+                }
+              ]
+            },
+            "child_tasks_local_reference_list": [
+              {
+                "kind": "app_task",
+                "name": "WindowsDiskStats",
+                "uuid": "{{UUID_4}}"
+              },
+              {
+                "kind": "app_task",
+                "name": "WindowsRAMCPUStats",
+                "uuid": "{{UUID_5}}"
+              },
+              {
+                "kind": "app_task",
+                "name": "LinuxVMStatus",
+                "uuid": "{{UUID_6}}"
+              }
+            ]
+          },
+          {
+            "name": "WindowsDiskStats",
+            "type": "EXEC",
+            "uuid": "{{UUID_4}}",
+            "attrs": {
+              "script_type": "npsscript",
+              "script": "Get-PSDrive C | ForEach-Object { $_.Used / $_.Maximum * 100 }"
+            },
+            "target_any_local_reference": {
+              "kind": "endpoint",
+              "name": "WindowsEndpoint",
+              "uuid": "{{UUID_7}}"
+            },
+            "child_tasks_local_reference_list": [],
+            "variable_list": [],
+            "status_map_list": []
+          },
+          {
+            "name": "WindowsRAMCPUStats",
+            "type": "EXEC",
+            "uuid": "{{UUID_5}}",
+            "attrs": {
+              "script_type": "npsscript",
+              "script": "$mem = Get-WmiObject Win32_OperatingSystem; \"RAM Used: $([math]::Round(($mem.TotalVisibleMemorySize - $mem.FreePhysicalMemory)/$mem.TotalVisibleMemorySize*100,2))%\"; $cpu = Get-WmiObject Win32_Processor; \"CPU Load: $($cpu.LoadPercentage)%\""
+            },
+            "target_any_local_reference": {
+              "kind": "endpoint",
+              "name": "WindowsEndpoint",
+              "uuid": "{{UUID_7}}"
+            },
+            "child_tasks_local_reference_list": [],
+            "variable_list": [],
+            "status_map_list": []
+          },
+          {
+            "name": "LinuxVMStatus",
+            "type": "EXEC",
+            "uuid": "{{UUID_6}}",
+            "attrs": {
+              "script_type": "sh",
+              "script": "uptime"
+            },
+            "target_any_local_reference": {
+              "kind": "endpoint",
+              "name": "LinuxEndpoint",
+              "uuid": "{{UUID_8}}"
+            },
+            "child_tasks_local_reference_list": [],
+            "variable_list": [],
+            "status_map_list": []
+          }
+        ]
+      }
+    }
+  }
+}

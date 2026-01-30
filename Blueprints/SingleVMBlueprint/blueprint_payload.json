@@ -1,0 +1,194 @@
+{
+  "api_version": "3.0",
+  "metadata": {
+    "kind": "blueprint",
+    "name": "BasicLinuxVM",
+    "uuid": "{{UUID_1}}",
+    "categories": {
+      "TemplateType": "Vm"
+    }
+  },
+  "spec": {
+    "name": "BasicLinuxVM",
+    "description": "",
+    "resources": {
+      "service_definition_list": [
+        {
+          "name": "BasicLinuxVM_Service",
+          "uuid": "{{UUID_3}}"
+        }
+      ],
+      "package_definition_list": [
+        {
+          "name": "BasicLinuxVM_Package",
+          "uuid": "{{UUID_11}}",
+          "type": "CUSTOM",
+          "options": {
+            "install_runbook": {
+              "name": "BasicLinuxVM_Install",
+              "uuid": "{{UUID_12}}",
+              "main_task_local_reference": {
+                "kind": "app_task",
+                "name": "BasicLinuxVM_Install_DAG",
+                "uuid": "{{UUID_13}}"
+              },
+              "task_definition_list": [
+                {
+                  "name": "BasicLinuxVM_Install_DAG",
+                  "uuid": "{{UUID_14}}",
+                  "type": "DAG",
+                  "attrs": {
+                    "edges": []
+                  },
+                  "child_tasks_local_reference_list": []
+                }
+              ]
+            },
+            "uninstall_runbook": {
+              "name": "BasicLinuxVM_Uninstall",
+              "uuid": "{{UUID_15}}",
+              "main_task_local_reference": {
+                "kind": "app_task",
+                "name": "BasicLinuxVM_Uninstall_DAG",
+                "uuid": "{{UUID_16}}"
+              },
+              "task_definition_list": [
+                {
+                  "name": "BasicLinuxVM_Uninstall_DAG",
+                  "uuid": "{{UUID_17}}",
+                  "type": "DAG",
+                  "attrs": {
+                    "edges": []
+                  },
+                  "child_tasks_local_reference_list": []
+                }
+              ]
+            }
+          },
+          "service_local_reference_list": [
+            {
+              "kind": "service",
+              "name": "BasicLinuxVM_Service",
+              "uuid": "{{UUID_3}}"
+            }
+          ],
+          "variable_list": []
+        }
+      ],
+      "substrate_definition_list": [
+        {
+          "name": "BasicLinuxVM_Substrate",
+          "uuid": "{{UUID_4}}",
+          "type": "AHV_VM",
+          "os_type": "Linux",
+          "create_spec": {
+            "name": "{{calm_application_name}}-{{calm_array_index}}",
+            "cluster_reference": {
+              "kind": "cluster",
+              "name": "auto_cluster_prod_e9af58ad7f61",
+              "uuid": "00063f5d-227c-3ada-0000-00000001163b"
+            },
+            "resources": {
+              "num_sockets": 1,
+              "num_vcpus_per_socket": 1,
+              "memory_size_mib": 1024,
+              "disk_list": [
+                {
+                  "data_source_reference": {
+                    "kind": "image",
+                    "name": "Centos7HadoopMaster",
+                    "uuid": "ae75ce94-447e-42fe-a12d-634f15529516"
+                  },
+                  "device_properties": {
+                    "device_type": "DISK",
+                    "disk_address": {
+                      "adapter_type": "SCSI",
+                      "device_index": 0
+                    }
+                  }
+                }
+              ],
+              "nic_list": [
+                {
+                  "subnet_reference": {
+                    "kind": "subnet",
+                    "name": "vlan1211",
+                    "uuid": "b0338697-e55c-4f3c-9e0d-7b7586ed3a5e"
+                  },
+                  "nic_type": "NORMAL_NIC"
+                }
+              ],
+              "boot_config": {
+                "boot_device": {
+                  "disk_address": {
+                    "adapter_type": "SCSI",
+                    "device_index": 0
+                  }
+                }
+              },
+              "account_uuid": "{{UUID_8}}"
+            }
+          },
+          "readiness_probe": {
+            "disable_readiness_probe": true
+          },
+          "action_list": [],
+          "variable_list": []
+        }
+      ],
+      "app_profile_list": [
+        {
+          "name": "BasicLinuxVM_AppProfile",
+          "uuid": "{{UUID_9}}",
+          "deployment_create_list": [
+            {
+              "name": "BasicLinuxVM_Deployment",
+              "uuid": "{{UUID_10}}",
+              "type": "GREENFIELD",
+              "substrate_local_reference": {
+                "kind": "substrate",
+                "name": "BasicLinuxVM_Substrate",
+                "uuid": "{{UUID_4}}"
+              },
+              "package_local_reference_list": [
+                {
+                  "kind": "package",
+                  "name": "BasicLinuxVM_Package",
+                  "uuid": "{{UUID_11}}"
+                }
+              ],
+              "min_replicas": "1",
+              "max_replicas": "1",
+              "variable_list": [],
+              "action_list": [],
+              "dependency_list": []
+            }
+          ],
+          "variable_list": [],
+          "action_list": [],
+          "dependency_list": []
+        }
+      ],
+      "credential_definition_list": [
+        {
+          "name": "BasicLinuxVM_Credential",
+          "uuid": "{{UUID_18}}",
+          "type": "PASSWORD",
+          "cred_class": "static",
+          "username": "root",
+          "secret": {
+            "value": "nutanix/4u",
+            "attrs": {
+              "is_secret_modified": false
+            }
+          }
+        }
+      ],
+      "default_credential_local_reference": {
+        "kind": "credential",
+        "name": "BasicLinuxVM_Credential",
+        "uuid": "{{UUID_18}}"
+      }
+    }
+  }
+}
