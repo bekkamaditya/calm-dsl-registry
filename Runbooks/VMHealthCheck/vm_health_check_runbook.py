@@ -25,3 +25,9 @@ def VMHealthCheckRunbook():
         filename="scripts/windows_ram_cpu_check.ps1",
         target=ref(Endpoint.use_existing("WindowsEndpoint")),
     )
+    # Task 3: Linux VM - Disk, RAM and CPU utilisation
+    Task.Exec.ssh(
+        name="LinuxDiskRamCPUStats",
+        filename="scripts/linux_health_check.sh",
+        target=ref(Endpoint.use_existing("LinuxEndpoint")),
+    )
